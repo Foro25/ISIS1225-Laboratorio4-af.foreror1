@@ -20,4 +20,21 @@ def mayor_diferencia(lst):
         return math.fabs(lst["first"]["info"] - lst["last"]["info"])
     
     else:
+        actual = lst["first"]
+        max = lst["first"]["info"]
+
+        while actual != None:
+            if actual["next"]["info"] > max:
+                max = actual["next"]["info"]
+            actual = actual["next"]
         
+        actual = lst["first"]
+        min = lst["first"]["info"]
+
+        while actual != None:
+            if actual["next"]["info"] < min:
+                min = actual["next"]["info"]
+            actual = actual["next"]
+        
+        return math.fabs(max - min)
+
