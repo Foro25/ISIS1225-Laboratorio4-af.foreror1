@@ -28,7 +28,7 @@ import csv
 import os
 from DataStructures.List import single_linked_list as lt
 
-data_dir = os.path.dirname(os.path.realpath('__file__')) + '/Data/' + '/DataStructures'
+data_dir = os.path.dirname(os.path.realpath('__file__')) + '/Data/' + '/GoodReads/'
 
 """
 El controlador se encarga de mediar entre la vista y el modelo.
