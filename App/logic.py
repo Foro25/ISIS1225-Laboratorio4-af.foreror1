@@ -26,7 +26,7 @@
 
 import csv
 import os
-# TODO Importar la libreria correspondiente para el manejo de listas sencillamente enlazadas
+from DataStructures.List import single_linked_list as lt
 
 data_dir = os.path.dirname(os.path.realpath('__file__')) + '/Data/'
 
@@ -46,10 +46,11 @@ def new_logic():
                'tags': None,
                'book_tags': None}
     
-    catalog['books'] = # TODO Implementar la inicialización de la lista de libros
-    catalog['authors']= lt.new_list()
-    catalog['tags']=  #TODO Implementar la inicialización de la lista de tags
-    catalog['book_tags'] = # TODO Implementar la inicialización de la lista de asociación de libros y tags
+    catalog['books'] = lt.new_list()
+    catalog['authors'] = lt.new_list()
+    catalog['tags'] =  lt.new_list()
+    catalog['book_tags'] = lt.new_list()
+    
     return catalog
 
 
@@ -105,13 +106,22 @@ def get_best_avg_rating(catalog):
     """
     Retorna el libro con el mayor rating promedio (avg_rating) de los datos
     """
-    # TODO Implementar la función para obtener el libro con el mayor avg_rating
+    best_book = None
+    best_rating = 0
+    size = lt.size(catalog['books'])
+    for i in range(size):
+        book = lt.get_element(catalog['books'], i)
+        if book['average_rating'] > best_rating:
+            best_rating = book['average_rating']
+            best_book = book
+            
+    return best_book
 
 def get_books_by_author(catalog, author_name):
     """
     Retrona los libros de un autor
     """
-    pos_author =pos_author = lt.is_present(catalog['authors'], author_name,compare_authors)
+    pos_author = lt.is_present(catalog['authors'], author_name, compare_authors)
     if pos_author > 0:
         author = lt.get_element(catalog['authors'], pos_author)
         return author
@@ -121,32 +131,38 @@ def get_book_info_by_book_id(catalog, book_id):
     """
     Retorna toda la informacion que se tenga almacenada de un libro segun su titulo.
     """
-    pos_book =  lt.is_present(catalog['books'], book_id, compare_book_ids)
+    pos_book = lt.is_present(catalog['books'], book_id, compare_book_ids)
     if pos_book > 0:
         book = lt.get_element(catalog['books'], pos_book)
         return book
     return None
 
 def get_first_last_books(catalog, top):
-    # TODO Implementar la función que retorne dos listas con los n primeros y ultimos libros cargados
+    if top==0:
+        return None
+    else:
+        first_elems=[]
+        last_elems=[]
+        for i in range(top):
+            first_elems.append(lt.get_element(catalog["books"],i))
+            last_elems.append(lt.get_element(catalog["books"],catalog["books"]["size"]-top))
+        
+    
     return first_elems, last_elems
 
 def count_books_by_tag(catalog, tag):
+    return catalog[str(tag)]["size"]
     """
     Retorna el conteo de libros que tienen asociado el tag solicitado.
     """
-    # TODO Implementar la función de conteo de libros por tag
+    
 
 # Funciones para agregar informacion al catalogo
 
 def add_book(catalog, book):
-    # Se adiciona el libro a la lista de libros
     book["goodreads_book_id"] = int(book["goodreads_book_id"])
     lt.add_last(catalog['books'], book)
-    # Se obtienen los autores del libro
     authors = book['authors'].split(",")
-    # Cada autor, se crea en la lista de libros del catalogo, y se
-    # crea un libro en la lista de dicho autor (apuntador al libro)
     for author in authors:
         add_book_author(catalog, author.strip(), book)
     return catalog
@@ -251,10 +267,13 @@ def compare_tag_names(name, tag):
     return -1
 
 def compare_book_ids(id, book):
-# TODO Implementar la función de comparación por book id
-
-
-# funciones para comparar elementos dentro de algoritmos de ordenamientos
+    book_id = book['goodreads_book_id']
+    if id == book_id:
+        return 0
+    elif id > book_id:
+        return 1
+    else:
+        return -1
 
 def compare_ratings(book1, book2):
     return (float(book1['average_rating']) > float(book2['average_rating']))
